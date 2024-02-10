@@ -2,20 +2,25 @@
 
 module testbench ();
 
+  localparam CLK_PERIOD = 4;
+  localparam SIM_TIME = 100000;
+
   initial begin
-    $dumpfile("wave.vcd");  //生成的vcd文件名称
-    $dumpvars(0, testbench);  //tb模块名称
+    $dumpfile("wave.vcd");
+    $dumpvars(0, testbench);
   end
 
-  localparam CLK_PERIOD = 4;
-  localparam MUL_BITWIDTH = 32;
-  localparam SIM_TIME = 100000;
+  initial begin
+    #(SIM_TIME) $finish;
+  end
 
   reg clk = 0;
   always #(CLK_PERIOD / 2) clk = ~clk;
 
   reg rstn = 0;
   initial #(50 * CLK_PERIOD) rstn = 1;
+
+  localparam MUL_BITWIDTH = 32;
 
   reg  [    MUL_BITWIDTH-1:0] in_a;
   reg  [    MUL_BITWIDTH-1:0] in_b;
@@ -47,10 +52,6 @@ module testbench ();
       end
     end
 
-  end
-
-  initial begin
-    #(SIM_TIME) $finish;
   end
 
 endmodule
