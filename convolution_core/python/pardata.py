@@ -24,15 +24,24 @@ def main():
     proc_res_vpp = max(proc_res)-min(proc_res)
     orgin_res *= proc_res_vpp/orgin_res_vpp
 
-    pyplot.plot(orgin_res)
-    pyplot.plot(proc_res)
+    orgin_res_fft = numpy.fft.fft(orgin_res[:1000])
+    proc_res_fft = numpy.fft.fft(proc_res[:1000])
+
+    orgin_res_fft_amp = numpy.abs(orgin_res_fft)
+    orgin_res_fft_phase = numpy.arctan(- numpy.imag(orgin_res_fft) /
+                                       numpy.real(orgin_res_fft))
+    print(orgin_res_fft_phase)
+
+    proc_res_fft_amp = numpy.abs(proc_res_fft)
+    proc_res_fft_phase = numpy.arctan(-numpy.imag(
+        proc_res_fft)/numpy.real(proc_res_fft))
+
+    pyplot.plot(numpy.log10(orgin_res_fft_amp))
+    pyplot.plot(numpy.log10(proc_res_fft_amp))
     pyplot.show()
 
-    orgin_res_rfft = numpy.fft.rfft(orgin_res[:1024])
-    proc_res_rfft = numpy.fft.rfft(proc_res[:1024])
-
-    pyplot.plot(numpy.log10(orgin_res_rfft[1:]))
-    pyplot.plot(numpy.log10(proc_res_rfft[1:]))
+    pyplot.plot(orgin_res_fft_phase)
+    pyplot.plot(proc_res_fft_phase)
     pyplot.show()
 
     return 0

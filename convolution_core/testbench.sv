@@ -30,48 +30,44 @@ module testbench ();
 
   task apb_write(input [31:0] addr, input [31:0] data);
     begin
-      @(negedge clk);
-      psel    = 1'b1;
-      penable = 1'b0;
-      pwrite  = 1'b1;
-      paddr   = addr;
-      pwdata  = data;
       @(posedge clk);
+      psel    <= 1'b1;
+      penable <= 1'b0;
+      pwrite  <= 1'b1;
+      paddr   <= addr;
+      pwdata  <= data;
 
-      @(negedge clk);
-      penable = 1'b1;
       @(posedge clk);
+      penable <= 1'b1;
 
       while (pready != 1'b1) @(posedge clk);
-      psel    = 1'b0;
-      penable = 1'b0;
-      pwrite  = 1'b0;
-      paddr   = 32'b0;
-      pwdata  = 32'b0;
-      repeat (10) @(posedge clk);
+      psel    <= 1'b0;
+      penable <= 1'b0;
+      pwrite  <= 1'b0;
+      paddr   <= 32'b0;
+      pwdata  <= 32'b0;
+      repeat (2) @(posedge clk);
     end
   endtask
 
   task apb_read(input [31:0] addr, output [31:0] data);
     begin
-      @(negedge clk);
-      psel    = 1'b1;
-      penable = 1'b0;
-      pwrite  = 1'b0;
-      paddr   = addr;
       @(posedge clk);
+      psel    <= 1'b1;
+      penable <= 1'b0;
+      pwrite  <= 1'b0;
+      paddr   <= addr;
 
-      @(negedge clk);
-      penable = 1'b1;
       @(posedge clk);
+      penable <= 1'b1;
 
       while (pready != 1'b1) @(posedge clk);
-      data    = prdata;
-      psel    = 1'b0;
-      penable = 1'b0;
-      pwrite  = 1'b0;
-      paddr   = 32'b0;
-      repeat (10) @(posedge clk);
+      data    <= prdata;
+      psel    <= 1'b0;
+      penable <= 1'b0;
+      pwrite  <= 1'b0;
+      paddr   <= 32'b0;
+      repeat (2) @(posedge clk);
     end
   endtask
 
@@ -132,6 +128,7 @@ module testbench ();
     end
 
     $display("Wrote parameters.");
+    // $finish;
 
     orgin_res_file = $fopen("orgin_res.dat", "w");
     proc_res_file  = $fopen("proc_res.dat", "w");

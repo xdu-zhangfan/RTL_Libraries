@@ -119,6 +119,4 @@ module multiplier_unsigned #(
     end
   endgenerate
 
-
-
 endmodule
