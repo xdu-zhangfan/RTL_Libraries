@@ -14,7 +14,7 @@ module testbench ();
     #(SIM_TIME) $finish;
   end
 
-  reg clk = 0;
+  reg clk = 1;
   always #(CLK_PERIOD / 2) clk = ~clk;
 
   reg rstn = 0;
@@ -42,14 +42,12 @@ module testbench ();
     in_b = {MUL_BITWIDTH{1'b0}};
 
     #(60 * CLK_PERIOD);
-    #(CLK_PERIOD / 2);
 
-    in_a = 1;
-    in_b = 1;
-
-    #(CLK_PERIOD)
-    in_a = 0;
-    in_b = 0;
+    for (in_a = 0; in_a < 16; in_a = in_a + 1) begin
+      for (in_b = 0; in_b < 16; in_b = in_b + 1) begin
+        #(CLK_PERIOD);
+      end
+    end
 
   end
 

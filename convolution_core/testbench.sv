@@ -14,7 +14,7 @@ module testbench ();
     #(SIM_TIME) $finish;
   end
 
-  reg clk = 0;
+  reg clk = 1;
   always #(CLK_PERIOD / 2) clk = ~clk;
 
   reg rstn = 0;
@@ -119,7 +119,6 @@ module testbench ();
 
   initial begin
     #(60 * CLK_PERIOD);
-    #(CLK_PERIOD / 2);
 
     $display("Initialized.");
 
