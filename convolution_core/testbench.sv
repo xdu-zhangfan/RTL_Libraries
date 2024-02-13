@@ -72,15 +72,17 @@ module testbench ();
   endtask
 
   localparam CONV_BITWIDTH = 16;
-  localparam CONV_CORE_DEPTH = 256;
+  localparam CONV_CORE_DEPTH = 16;
 
   localparam FREQ_0_MHZ = 7;
   localparam FREQ_1_MHZ = 14;
 
+  reg                      data_in_enable;
   reg  [CONV_BITWIDTH-1:0] data_in;
+
+  wire                     data_pp_out_enable;
   wire [CONV_BITWIDTH-1:0] data_pp_out;
   wire [CONV_BITWIDTH-1:0] data_res_out;
-  reg                      data_enable;
 
   convolution_core #(
       .CONV_CORE_DEPTH(CONV_CORE_DEPTH),
@@ -90,10 +92,12 @@ module testbench ();
       .clk (clk),
       .rstn(rstn),
 
-      .data_in     (data_in),
-      .data_pp_out (data_pp_out),
-      .data_res_out(data_res_out),
-      .data_enable (data_enable),
+      .data_in_enable(data_in_enable),
+      .data_in       (data_in),
+
+      .data_pp_out_enable(data_pp_out_enable),
+      .data_pp_out       (data_pp_out),
+      .data_res_out      (data_res_out),
 
       .p_sel  (psel),
       .p_strb (4'b1111),
@@ -132,7 +136,7 @@ module testbench ();
     orgin_res_file = $fopen("orgin_res.dat", "w");
     proc_res_file  = $fopen("proc_res.dat", "w");
 
-    data_enable    = 1;
+    data_in_enable = 1;
     for (data_i = 0; 1; data_i = data_i + 1) begin
       #(CLK_PERIOD);
       freq_0  = $sin(2 * 3.14159 / (1000 / CLK_PERIOD / FREQ_0_MHZ) * data_i) * (2 ** (CONV_BITWIDTH - 3));

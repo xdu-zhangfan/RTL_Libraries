@@ -7,10 +7,13 @@ module convolution_core #(
     input rstn,
 
     // Data flow
-    input  [DATA_BITWIDTH-1:0] data_in,
+    input                     data_in_enable,
+    input [DATA_BITWIDTH-1:0] data_in,
+
+    output                     data_pp_out_enable,
     output [DATA_BITWIDTH-1:0] data_pp_out,
     output [DATA_BITWIDTH-1:0] data_res_out,
-    input                      data_enable,
+
 
     // APB interface
     input             p_sel,
@@ -132,7 +135,7 @@ module convolution_core #(
         if (!rstn) begin
           conv_pipeline[gen_i] <= {DATA_BITWIDTH{1'b0}};
         end else begin
-          if (data_enable) begin
+          if (data_in_enable) begin
             conv_pipeline[gen_i] <= conv_pipeline[gen_i-1];
           end else begin
             conv_pipeline[gen_i] <= conv_pipeline[gen_i];
@@ -146,7 +149,7 @@ module convolution_core #(
     if (!rstn) begin
       conv_pipeline[0] <= {DATA_BITWIDTH{1'b0}};
     end else begin
-      if (data_enable) begin
+      if (data_in_enable) begin
         conv_pipeline[0] <= data_in;
       end else begin
         conv_pipeline[0] <= conv_pipeline[0];
@@ -154,6 +157,28 @@ module convolution_core #(
     end
   end
   assign data_pp_out = conv_pipeline[CONV_CORE_DEPTH-1];
+
+  // generate data_pp_out enable signal
+  reg [CONV_CORE_DEPTH - 1:0] data_pp_out_enable_buf;
+  generate
+    for (gen_i = 1; gen_i < CONV_CORE_DEPTH; gen_i = gen_i + 1) begin : g_data_pp_out_enable_buf
+      always @(posedge clk) begin
+        if (!rstn) begin
+          data_pp_out_enable_buf[gen_i] <= 1'b0;
+        end else begin
+          data_pp_out_enable_buf[gen_i] <= data_pp_out_enable_buf[gen_i-1];
+        end
+      end
+    end
+  endgenerate
+  always @(posedge clk) begin
+    if (!rstn) begin
+      data_pp_out_enable_buf[0] <= 1'b0;
+    end else begin
+      data_pp_out_enable_buf[0] <= data_in_enable;
+    end
+  end
+  assign data_pp_out_enable = data_pp_out_enable_buf[CONV_CORE_DEPTH-1];
 
   //Multipliers
   wire [(DATA_BITWIDTH*2)-1:0] mul_res[0:CONV_CORE_DEPTH - 1];
