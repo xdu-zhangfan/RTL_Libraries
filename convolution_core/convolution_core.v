@@ -199,7 +199,7 @@ module convolution_core #(
   endgenerate
 
   // Adders
-  reg [(DATA_BITWIDTH*2)-1:0] adder_bufs[0:(CONV_CORE_DEPTH*2-2)-1];
+  reg [(DATA_BITWIDTH*2)-1:0] adder_bufs[0:(CONV_CORE_DEPTH-1)-1];
   generate
     for (gen_i = 0; gen_i < $clog2(CONV_CORE_DEPTH); gen_i = gen_i + 1) begin : g_adders
 
