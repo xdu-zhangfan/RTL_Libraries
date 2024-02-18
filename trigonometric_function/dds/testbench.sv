@@ -24,25 +24,31 @@ module testbench ();
   localparam DATA_BITWIDTH = 8;
 
   reg  [DEPTH_BITWIDTH-1:0] pword;
+  reg  [DEPTH_BITWIDTH-1:0] fword;
   wire [ DATA_BITWIDTH-1:0] cos;
+  wire [ DATA_BITWIDTH-1:0] sin;
 
-  cos_function_x1 #(
+  dds #(
       .DEPTH_BITWIDTH(DEPTH_BITWIDTH),
       .DATA_BITWIDTH (DATA_BITWIDTH)
-  ) cos_function_inst (
+  ) dds_inst (
       .clk (clk),
       .rstn(rstn),
 
       .pword(pword),
-      .cos  (cos)
+      .fword(fword),
+
+      .cos(cos),
+      .sin(sin)
   );
 
   initial begin
     pword = 0;
+    fword = 2;
 
     #(60 * CLK_PERIOD);
 
-    for (pword = 0; 1; pword = pword + 1) #(CLK_PERIOD);
+    // for (pword = 0; 1; pword = pword + 1) #(CLK_PERIOD);
 
   end
 
