@@ -1,6 +1,6 @@
 module cos_function_x1 #(
-    parameter DEPTH_BITWIDTH = 8,
-    parameter DATA_BITWIDTH  = 8
+    parameter DEPTH_BITWIDTH = 16,
+    parameter DATA_BITWIDTH  = 16
 ) (
     input clk,
     input rstn,
