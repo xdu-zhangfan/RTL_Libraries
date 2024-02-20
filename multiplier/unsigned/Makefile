@@ -1,4 +1,3 @@
-RTL_TOP_FILE = multiplier_unsigned.v
 TESTBENCH = testbench.sv
 
 all:

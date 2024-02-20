@@ -1,4 +1,3 @@
-RTL_TOP_FILE = cos_function_x4.v cos_function_x1.v
 TESTBENCH = testbench.sv
 
 all:

@@ -1,4 +1,3 @@
-RTL_TOP_FILE = dds.v 
 TESTBENCH = testbench.sv
 
 all:
